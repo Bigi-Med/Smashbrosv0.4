@@ -1,0 +1,516 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Smashbros TINDER API
+  description: An api for a project following the course of mobile development PG219.
+paths:
+  /register/check-email:
+    post:
+      summary: Checking if an email is valid without pressing "Register" by the user.
+      consumes:
+        - app/json
+      parameters:
+        - name: email
+          in: body
+          required: true
+          schema:
+            properties:
+              email:
+                type: string
+      responses:
+        "409":
+          description: Error message
+          content:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+
+        "200":
+          description: A valid response
+          content:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+
+  /profile/upload-image:
+    post:
+      summary: Uploading an image to the user's profile
+      consumes:
+        - app/json
+      parameters:
+        - name: index
+          in: body
+          required: true
+          schema:
+            properties:
+              index:
+                type: integer
+                description: the index of where to put the image in the array of images (from 1 to 5)
+        - name: imageLink
+          in: body
+          required: true
+          schema:
+            properties:
+              imageLink:
+                type: string
+                description: the link to the image saved in the cloud
+        - name: token
+          in: body
+          required: true
+          schema:
+            properties:
+              index:
+                type: string
+                description: the user's token
+      responses:
+        "500":
+          description: Failing to update the profile or saving the image in the database
+          content:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+
+        "200":
+          description: A valid response, the image is saved
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /profile/location:
+    post:
+      summary: Getting the user's location and saving it in the database
+      consumes:
+        - app/json
+      parameters:
+        - name: location
+          in: body
+          required: true
+          schema:
+            properties:
+              location:
+                type: object
+                description: the user's geographical coordinates
+        - name: token
+          in: body
+          required: true
+          schema:
+            properties:
+              token:
+                type: string
+                description: the user's token
+      responses:
+        "500":
+          description: Sent if the token is expired
+          content:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+
+        "200":
+          description: Location saved successfully
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /profile/profile-photo:
+    get:
+      summary: Sending the link of the profile photo from the database to the user.
+      consumes:
+        - app/json
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            properties:
+              token:
+                type: string
+                description: the user's token
+      responses:
+        "500":
+          description: Sent if the token is expired
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+        "404":
+          description: Sent if profile photo not found in database
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+        "200":
+          description: Link sent with success
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /profile/images:
+    get:
+      summary: A request to send all the images from the db to the user
+      consumes:
+        - app/json
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            properties:
+              token:
+                type: string
+                description: the user's token
+      responses:
+        "500":
+          description: Sent if the token is expired
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+        "404":
+          description: Sent if no images are found
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+        "200":
+          description: Image links sent with success
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /home/likes:
+    post:
+      summary: Saving a liked profile in the user's model
+      consumes:
+        - app/json
+      parameters:
+        - name: uid
+          in: body
+          required: true
+          schema:
+            type: string
+            properties:
+              index:
+                type: string
+                description: the unique id of the liked user in the database
+        - name: state
+          in: body
+          required: true
+          schema:
+            type: boolean
+            properties:
+              state:
+                type: boolean
+                description: whether the user was liked or passed
+        - name: token
+          in: body
+          required: true
+          schema:
+            type: string
+            properties:
+              token:
+                type: string
+                description: the user's token
+      responses:
+        "500":
+          description: Failing to find the liked user, expired token or an error while saving the reaction.
+          content:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+
+        "200":
+          description: A valid response, the reaction is saved
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: boolean
+
+  /register:
+    post:
+      summary: Adding a new user to the database
+      consumes:
+        - app/json
+      parameters:
+        - name: fisrtName
+          in: body
+          required: true
+          schema:
+            type: string
+            properties:
+              firstName:
+                type: string
+                description: user info
+        - name: lastName
+          in: body
+          required: true
+          schema:
+            type: boolean
+            properties:
+              lastName:
+                type: string
+                description: user info
+        - name: username
+          in: body
+          required: true
+          schema:
+            type: string
+            properties:
+              firstName:
+                type: string
+                description: user info
+        - name: email
+          in: body
+          required: true
+          schema:
+            type: boolean
+            properties:
+              lastName:
+                type: string
+                description: user's email
+        - name: password
+          in: body
+          required: true
+          schema:
+            type: string
+            properties:
+              firstName:
+                type: string
+                description: user's password
+
+      responses:
+        "200":
+          description: A valid response, new user is saved (all errors are managed on client side)
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /login:
+    post:
+      summary: Logging in a user (errors are managed on client side)
+      consumes:
+        - app/json
+      parameters:
+        - name: email
+          in: body
+          required: true
+          schema:
+            type: string
+            properties:
+              email:
+                type: string
+                description: the user's email (must be unique)
+        - name: password
+          in: body
+          required: true
+          schema:
+            type: string
+            properties:
+              password:
+                type: string
+                description: the user's password
+      responses:
+        "400":
+          description: Access not allowed if the password is wrong.
+          content:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+
+        "404":
+          description: Sent if the typed email is wrong
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+        "200":
+          description: A valid response, the user is logged in
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+
+  /profile:
+    post:
+      summary: Saving the user's profile information in the database
+      consumes:
+        - app/json
+      parameters:
+        - name: profile data
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: the user's
+              age:
+                type: integer
+              gender:
+                type: string
+              interest:
+                type: string
+              description:
+                type: string
+              passions:
+                type: array
+              orientation:
+                type: string
+      responses:
+        "500":
+          description: Failing to update the profile
+          content:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+
+        "200":
+          description: A valid response, all info is saved
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /home:
+    get:
+      summary: Sending an array of profiles to the user to navigate through
+      consumes:
+        - app/json
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            properties:
+              token:
+                type: string
+                description: the user's token
+      responses:
+        "500":
+          description: Sent if the token is expired
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+        "404":
+          description: Sent if no profile is left to see
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: array
+
+        "200":
+          description: Array sent successfully
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: array
+  /chat:
+    get:
+      summary: Sending the matched profiles to the user to join the chat rooms.
+      consumes:
+        - app/json
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            properties:
+              token:
+                type: string
+                description: the user's token
+
+      responses:
+        "500":
+          description: Sent if the token is expired
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+        "200":
+          description: Profiles sent with success
+          content:
+            app/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object

@@ -1,2 +1,1 @@
-# Smashbrosv0.4
-Tinder clone using MERN stack (Mongo, Express, ReactNative, NodeJs)
+# projet-2022-smashbros-v0-4
